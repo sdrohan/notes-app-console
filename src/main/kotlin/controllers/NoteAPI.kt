@@ -5,10 +5,22 @@ import models.Note
 class NoteAPI {
     private var notes = ArrayList<Note>()
 
+    //----------------------------------------------
+    //  CRUD METHODS
+    //----------------------------------------------
     fun add(note: Note): Boolean {
         return notes.add(note)
     }
 
+    fun deleteNote(indexToDelete: Int): Note? {
+        return if (isValidListIndex(indexToDelete, notes)) {
+            notes.removeAt(indexToDelete)
+        } else null
+    }
+
+    //----------------------------------------------
+    //  LISTING METHODS
+    //----------------------------------------------
     fun listAllNotes(): String {
         return if (notes.isEmpty()) {
             "No notes stored"
@@ -69,6 +81,9 @@ class NoteAPI {
         }
     }
 
+    //----------------------------------------------
+    //  COUNTING METHODS
+    //----------------------------------------------
     fun numberOfNotes(): Int {
         return notes.size
     }
@@ -112,8 +127,12 @@ class NoteAPI {
         } else null
     }
 
+    //----------------------------------------------
+    //  HELPER METHODS
+    //----------------------------------------------
     //utility method to determine if an index is valid in a list.
     fun isValidListIndex(index: Int, list: List<Any>): Boolean {
         return (index >= 0 && index < list.size)
     }
+
 }
