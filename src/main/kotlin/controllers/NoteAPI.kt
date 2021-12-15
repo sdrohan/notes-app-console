@@ -18,6 +18,22 @@ class NoteAPI {
         } else null
     }
 
+    fun updateNote(indexToUpdate: Int, note: Note?): Boolean {
+        //find the note object by the index number
+        val foundNote = findNote(indexToUpdate)
+
+        //if the note exists, use the note details passed as parameters to update the found note in the ArrayList.
+        if ((foundNote != null) && (note != null)) {
+            foundNote.noteTitle = note.noteTitle
+            foundNote.notePriority = note.notePriority
+            foundNote.noteCategory = note.noteCategory
+          return true
+        }
+
+        //if the note was not found, return false, indicating that the update was not successful
+        return false
+    }
+
     //----------------------------------------------
     //  LISTING METHODS
     //----------------------------------------------
@@ -121,10 +137,17 @@ class NoteAPI {
         return counter
     }
 
-    fun findNote(index: Int): Note? {
+    //----------------------------------------------
+    //  SEARCHING METHODS
+    //----------------------------------------------
+     fun findNote(index: Int): Note? {
         return if (isValidListIndex(index, notes)) {
             notes[index]
         } else null
+    }
+
+    fun isValidIndex(index: Int) :Boolean{
+        return isValidListIndex(index, notes);
     }
 
     //----------------------------------------------

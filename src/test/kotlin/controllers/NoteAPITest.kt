@@ -66,6 +66,31 @@ class NoteAPITest {
     }
 
     @Nested
+    inner class UpdateNotes {
+        @Test
+        fun `updating a note that does not exist returns false`(){
+            assertFalse(populatedNotes!!.updateNote(6, Note("Updating Note", 2, "Work", false)))
+            assertFalse(populatedNotes!!.updateNote(-1, Note("Updating Note", 2, "Work", false)))
+            assertFalse(emptyNotes!!.updateNote(0, Note("Updating Note", 2, "Work", false)))
+        }
+
+        @Test
+        fun `updating a note that exists returns true and updates`() {
+            //check note 5 exists and check the contents
+            assertEquals(swim, populatedNotes!!.findNote(4))
+            assertEquals("Swim - Pool", populatedNotes!!.findNote(4)!!.noteTitle)
+            assertEquals(3, populatedNotes!!.findNote(4)!!.notePriority)
+            assertEquals("Hobby", populatedNotes!!.findNote(4)!!.noteCategory)
+
+            //update note 5 with new information and ensure contents updated successfully
+            assertTrue(populatedNotes!!.updateNote(4, Note("Updating Note", 2, "College", false)))
+            assertEquals("Updating Note", populatedNotes!!.findNote(4)!!.noteTitle)
+            assertEquals(2, populatedNotes!!.findNote(4)!!.notePriority)
+           assertEquals("College", populatedNotes!!.findNote(4)!!.noteCategory)
+        }
+    }
+
+    @Nested
     inner class DeleteNotes {
 
         @Test
@@ -83,6 +108,7 @@ class NoteAPITest {
             assertEquals(learnKotlin, populatedNotes!!.deleteNote(0))
             assertEquals(3, populatedNotes!!.numberOfNotes())
         }
+
     }
 
 
