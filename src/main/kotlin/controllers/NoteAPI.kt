@@ -1,9 +1,12 @@
 package controllers
 
 import models.Note
+import persistence.Serializer
 
-class NoteAPI {
-    private var notes = ArrayList<Note>()
+class NoteAPI(serializerType: Serializer){
+
+     private var serializer: Serializer = serializerType
+     private var notes = ArrayList<Note>()
 
     //----------------------------------------------
     //  CRUD METHODS
@@ -156,6 +159,19 @@ class NoteAPI {
     //utility method to determine if an index is valid in a list.
     fun isValidListIndex(index: Int, list: List<Any>): Boolean {
         return (index >= 0 && index < list.size)
+    }
+
+    //----------------------------------------------
+    //  PERSISTENCE METHODS
+    //----------------------------------------------
+    @Throws(Exception::class)
+    fun load() {
+        notes = serializer.read() as ArrayList<Note>
+    }
+
+    @Throws(Exception::class)
+    fun store() {
+        serializer.write(notes)
     }
 
 }

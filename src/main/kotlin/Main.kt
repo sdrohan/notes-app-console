@@ -1,13 +1,17 @@
 import controllers.NoteAPI
 import models.Note
 import mu.KotlinLogging
+import persistence.JSONSerializer
+import persistence.XMLSerializer
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
+import java.io.File
 import java.lang.System.exit
 
 private val logger = KotlinLogging.logger {}
 
-private val noteAPI = NoteAPI()
+//private val noteAPI = NoteAPI(XMLSerializer(File("notes.xml")))
+private val noteAPI = NoteAPI(JSONSerializer(File("notes.json")))
 
 fun main(args: Array<String>) {
     runMenu()
@@ -17,18 +21,21 @@ fun runMenu() {
     do {
         val option = mainMenu()
         when (option) {
-            1  -> addNote()
-            2  -> listNotes()
-            3  -> updateNote()
-            4  -> deleteNote()
-            0  -> exitApp()
+            1 -> addNote()
+            2 -> listNotes()
+            3 -> updateNote()
+            4 -> deleteNote()
+            20 -> save()
+            21 -> load()
+            0 -> exitApp()
             else -> System.out.println("Invalid option entered: ${option}")
         }
     } while (true)
 }
 
-fun mainMenu() : Int {
-    return readNextInt(""" 
+fun mainMenu(): Int {
+    return readNextInt(
+        """ 
          > ----------------------------------
          > |        NOTE KEEPER APP         |
          > ----------------------------------
@@ -38,12 +45,15 @@ fun mainMenu() : Int {
          > |   3) Update a note             |
          > |   4) Delete a note             |
          > ----------------------------------
+         > |   20) Save notes               |
+         > |   21) Load notes               |
          > |   0) Exit                      |
          > ----------------------------------
-         > ==>> """.trimMargin(">"))
+         > ==>> """.trimMargin(">")
+    )
 }
 
-fun addNote(){
+fun addNote() {
     //logger.info { "addNote() function invoked" }
     val noteTitle = readNextLine("Enter a title for the note: ")
     val notePriority = readNextInt("Enter a priority (1-low, 2, 3, 4, 5-high): ")
@@ -57,7 +67,7 @@ fun addNote(){
     }
 }
 
-fun listNotes(){
+fun listNotes() {
     //logger.info { "listNotes() function invoked" }
     println(noteAPI.listAllNotes())
 }
@@ -74,7 +84,7 @@ fun updateNote() {
             val noteCategory = readNextLine("Enter a category for the note: ")
 
             //pass the index of the note and the new note details to NoteAPI for updating and check for success.
-            if (noteAPI.updateNote(indexToUpdate, Note(noteTitle, notePriority, noteCategory, false))){
+            if (noteAPI.updateNote(indexToUpdate, Note(noteTitle, notePriority, noteCategory, false))) {
                 println("Update Successful")
             } else {
                 println("Update Failed")
@@ -85,7 +95,7 @@ fun updateNote() {
     }
 }
 
-fun deleteNote(){
+fun deleteNote() {
     //logger.info { "deleteNotes() function invoked" }
     listNotes()
     if (noteAPI.numberOfNotes() > 0) {
@@ -101,7 +111,26 @@ fun deleteNote(){
     }
 }
 
-fun exitApp(){
+//------------------------------------
+// PERSISTENCE METHODS
+// ------------------------------------
+fun save() {
+    try {
+        noteAPI.store()
+    } catch (e: Exception) {
+        System.err.println("Error writing to file: $e")
+    }
+}
+
+fun load() {
+    try {
+        noteAPI.load()
+    } catch (e: Exception) {
+        System.err.println("Error reading from file: $e")
+    }
+}
+
+fun exitApp() {
     println("Exiting...bye")
     exit(0)
 }
