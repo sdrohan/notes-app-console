@@ -51,15 +51,6 @@ class NoteAPI(serializerType: Serializer){
     //----------------------------------------------
     //  LISTING METHODS
     //----------------------------------------------
-    /*fun listAllNotes(): String {
-        if (notes.isEmpty()) {
-            return "No notes stored"
-        } else {
-            return notes.joinToString(separator = "\n") { note ->
-                notes.indexOf(note).toString() + ": " + note.toString()
-            }
-        }
-    }*/
 
     fun listAllNotes(): String =
         if  (notes.isEmpty()) "No notes stored"
@@ -81,19 +72,12 @@ class NoteAPI(serializerType: Serializer){
         }
     }
 
-    fun listArchivedNotes(): String {
-        return if (numberOfArchivedNotes() == 0) {
-            "No archived notes stored"
-        } else {
-            var listOfArchivedNotes = ""
-            for (note in notes) {
-                if (note.isNoteArchived) {
-                    listOfArchivedNotes += "${notes.indexOf(note)}: $note \n"
-                }
-            }
-            listOfArchivedNotes
-        }
-    }
+    fun listArchivedNotes(): String =
+        if  (numberOfArchivedNotes() == 0) "No archived notes stored"
+        else notes.filter { note -> note.isNoteArchived}
+            .joinToString (separator = "\n") { note ->
+                      notes.indexOf(note).toString() + ": " + note.toString() }
+
 
     fun listNotesBySelectedPriority(priority: Int): String {
         return if (notes.isEmpty()) {
