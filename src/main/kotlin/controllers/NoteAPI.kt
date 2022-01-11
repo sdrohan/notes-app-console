@@ -51,17 +51,21 @@ class NoteAPI(serializerType: Serializer){
     //----------------------------------------------
     //  LISTING METHODS
     //----------------------------------------------
-    fun listAllNotes(): String {
-        return if (notes.isEmpty()) {
-            "No notes stored"
+    /*fun listAllNotes(): String {
+        if (notes.isEmpty()) {
+            return "No notes stored"
         } else {
-            var listOfNotes = ""
-            for (i in notes.indices) {
-                listOfNotes += "${i}: ${notes[i]} \n"
+            return notes.joinToString(separator = "\n") { note ->
+                notes.indexOf(note).toString() + ": " + note.toString()
             }
-            listOfNotes
         }
-    }
+    }*/
+
+    fun listAllNotes(): String =
+        if  (notes.isEmpty()) "No notes stored"
+        else notes.joinToString (separator = "\n") { note ->
+                notes.indexOf(note).toString() + ": " + note.toString() }
+
 
     fun listActiveNotes(): String {
         return if (numberOfActiveNotes() == 0) {
