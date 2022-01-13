@@ -93,9 +93,7 @@ class NoteAPI(serializerType: Serializer){
 
     fun numberOfArchivedNotes(): Int = notes.count { note: Note -> note.isNoteArchived }
     fun numberOfActiveNotes(): Int   = notes.count { note: Note -> !note.isNoteArchived }
-
-    fun numberOfNotesByPriority(priority: Int): Int =
-        notes.count { note: Note -> note.notePriority == priority }
+    fun numberOfNotesByPriority(priority: Int): Int = notes.count { note: Note -> note.notePriority == priority }
 
     //----------------------------------------------
     //  SEARCHING METHODS
@@ -114,8 +112,6 @@ class NoteAPI(serializerType: Serializer){
         formatListString(
             notes.filter { note -> note.noteTitle.contains(searchString, ignoreCase = true) })
 
-
-
     //----------------------------------------------
     //  HELPER METHODS
     //----------------------------------------------
@@ -124,7 +120,7 @@ class NoteAPI(serializerType: Serializer){
         return (index >= 0 && index < list.size)
     }
 
-    fun formatListString(notesToFormat : List<Note>) :String =
+    private fun formatListString(notesToFormat : List<Note>) :String =
         notesToFormat
             .joinToString (separator = "\n") { note ->
                 notes.indexOf(note).toString() + ": " + note.toString() }
