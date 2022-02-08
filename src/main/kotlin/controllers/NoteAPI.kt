@@ -2,6 +2,7 @@ package controllers
 
 import models.Note
 import persistence.Serializer
+import utils.Utilities.isValidListIndex
 
 class NoteAPI(serializerType: Serializer){
 
@@ -115,11 +116,6 @@ class NoteAPI(serializerType: Serializer){
     //----------------------------------------------
     //  HELPER METHODS
     //----------------------------------------------
-    //utility method to determine if an index is valid in a list.
-    fun isValidListIndex(index: Int, list: List<Any>): Boolean {
-        return (index >= 0 && index < list.size)
-    }
-
     private fun formatListString(notesToFormat : List<Note>) :String =
         notesToFormat
             .joinToString (separator = "\n") { note ->
