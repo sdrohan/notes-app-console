@@ -27,5 +27,3 @@ class XMLSerializer(private val file: File) : Serializer {
         outputStream.close()
     }
 }
-
-
